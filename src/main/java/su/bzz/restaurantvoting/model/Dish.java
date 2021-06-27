@@ -39,7 +39,7 @@ public class Dish extends BaseEntity {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date date = new Date();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull

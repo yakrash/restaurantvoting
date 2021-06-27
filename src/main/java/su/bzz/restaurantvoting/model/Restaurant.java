@@ -1,5 +1,6 @@
 package su.bzz.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +25,10 @@ public class Restaurant extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Vote> vote;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Dish> dishes;
 }

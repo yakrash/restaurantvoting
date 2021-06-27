@@ -1,5 +1,6 @@
 package su.bzz.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.util.StringUtils;
@@ -20,7 +21,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString(callSuper = true, exclude = {"password"})
+@ToString(callSuper = true, exclude = {"password", "votes"})
 public class User extends BaseEntity implements Serializable {
 
     @Column(name = "email", nullable = false, unique = true)
@@ -53,7 +54,8 @@ public class User extends BaseEntity implements Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonIgnore
     private List<Vote> votes;
 
     public void setEmail(String email) {
