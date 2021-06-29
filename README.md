@@ -14,3 +14,15 @@ Build a voting system for deciding where to have lunch.
         If it is after 11:00 then it is too late, vote can't be changed
 
 Each restaurant provides a new menu each day.
+
+get menu of restaurant with id=1 for today
+curl -s http://localhost:8080/api/restaurant/1/menu --user user@gmail.com:password
+
+get all menus for today
+curl -s http://localhost:8080/api/restaurant/all-menu-today --user user@gmail.com:password
+
+add menu with dishes
+curl -s -i -X POST -d '[{"name":"New dish","priceInDollars":100},{"name": "Dish2","priceInDollars":300}]' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/api/restaurant/2/menu --user admin@gmail.com:admin
+
+add menu with dish
+curl -s -i -X POST -d '[{"name":"New dish only","priceInDollars":400}]' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/api/restaurant/2/menu --user admin@gmail.com:admin

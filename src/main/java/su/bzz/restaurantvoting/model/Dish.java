@@ -1,5 +1,6 @@
 package su.bzz.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +10,9 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "dishes")
@@ -30,18 +30,20 @@ public class Dish extends BaseEntity {
     private String name;
 
     @Column(name = "price_in_dollars", nullable = false)
-    @NotEmpty
+    @NotNull
     @Range(min = 1, max = 500)
     private Long priceInDollars;
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date date = new Date();
+    private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
+    @JsonIgnore
+    @ToString.Exclude
     private Restaurant restaurant;
 }

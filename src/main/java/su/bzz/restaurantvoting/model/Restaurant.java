@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "restaurants")
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -26,9 +25,16 @@ public class Restaurant extends BaseEntity {
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     @JsonIgnore
+    @ToString.Exclude
     private List<Vote> vote;
 
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Dish> dishes;
+
+    public Restaurant(Integer id, String name) {
+        super(id);
+        this.name = name;
+    }
 }

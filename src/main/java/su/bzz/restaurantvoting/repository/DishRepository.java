@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
-    @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:id AND d.date = CURRENT_DATE()")
+    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.restaurant.id=:id AND d.date = CURRENT_DATE()")
     List<Dish> findAllByRestaurantIdByToday(@Param("id") Integer id);
+
+    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.date = CURRENT_DATE()")
+    List<Dish> findAllByToday();
 }

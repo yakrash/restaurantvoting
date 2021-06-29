@@ -19,11 +19,13 @@ public class AccountController {
     @GetMapping("/{id}")
     @ResponseBody
     public User get(@PathVariable Integer id) {
+        log.info("get user with id: " + id);
         return userRepository.findById(id).orElseThrow();
     }
 
     @GetMapping
     public List<User> getAll() {
+        log.info("get allUsers");
         return userRepository.findAll();
     }
 }
