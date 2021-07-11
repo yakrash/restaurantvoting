@@ -1,5 +1,4 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9d2a6580b752440f9676825c57a1658b)](https://www.codacy.com/gh/yakrash/restaurantvoting/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yakrash/restaurantvoting&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://travis-ci.com/yakrash/restaurantvoting.svg?branch=master)](https://travis-ci.com/yakrash/restaurantvoting)
 
 Design and implement a REST API using Hibernate/Spring-Boot without frontend.
 
