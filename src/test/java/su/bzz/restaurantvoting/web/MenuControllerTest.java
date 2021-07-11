@@ -39,11 +39,11 @@ class MenuControllerTest extends AbstractControllerTest {
                 .andExpect(jsonMatcher(menusRestaurant1, TestData::assertEquals));
     }
 
-//    @Test
-//    void getAllByRestaurantWhereIdNotFound() throws Exception {
-//        perform(MockMvcRequestBuilders.get(URLREST + "/500/menu"))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    void getAllByRestaurantWhereIdNotFound() throws Exception {
+        perform(MockMvcRequestBuilders.get(URLREST + "/500/menu"))
+                .andExpect(status().isUnprocessableEntity());
+    }
 
     @Test
     void getAllMenuToday() throws Exception {
