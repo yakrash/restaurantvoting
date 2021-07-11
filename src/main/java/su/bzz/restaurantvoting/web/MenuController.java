@@ -33,23 +33,23 @@ import static su.bzz.restaurantvoting.web.MenuController.URL_MENU;
 public class MenuController {
     private final DishRepository dishRepository;
     private final RestaurantRepository restaurantRepository;
-    public static final String URL_MENU = "/api/restaurant";
+    public static final String URL_MENU = "/api/menu";
 
-    @GetMapping("/{restaurantId}/menu")
+    @GetMapping("/{restaurantId}")
     public List<Menu> getAllByRestaurantIdByToday(@PathVariable Integer restaurantId) {
         log.info("get All By RestaurantId {} By Today", restaurantId);
         List<Menu> menu = MenuUtil.getMenus(dishRepository.findAllByRestaurantIdByToday(restaurantId));
         return checkNotFound(menu, restaurantId);
     }
 
-    @GetMapping("/all-menu-today")
+    @GetMapping
     public List<Menu> getAllMenuToday() {
         log.info("Get all menu today");
         return MenuUtil.getMenus(dishRepository.findAllByToday());
     }
 
     //    https://stackoverflow.com/a/64061936/15422633
-    @PostMapping("/{restaurantId}/menu")
+    @PostMapping("/{restaurantId}")
     public ResponseEntity<List<Dish>> createMenuTodayOrNextDayIfVotingTimeIsEnd(
             @Valid @RequestBody ValidList<DishTo> dishesTo,
             @PathVariable Integer restaurantId) {
@@ -60,12 +60,12 @@ public class MenuController {
         List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToToday(dishesTo, restaurant));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(URL_MENU + "/{restaurantId}/menu")
+                .path(URL_MENU + "/{restaurantId}")
                 .buildAndExpand(restaurant.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(dishes);
     }
 
-    @PostMapping("/{restaurantId}/menu-every-day")
+    @PostMapping("/{restaurantId}/every-day")
     public ResponseEntity<List<Dish>> createMenuWithDate(
             @Valid @RequestBody ValidList<DishTo> dishesTo,
             @PathVariable Integer restaurantId) {

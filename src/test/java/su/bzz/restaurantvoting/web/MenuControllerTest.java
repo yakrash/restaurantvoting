@@ -33,7 +33,7 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByRestaurantIdByToday() throws Exception {
-        perform(MockMvcRequestBuilders.get(URL_MENU + "/1/menu"))
+        perform(MockMvcRequestBuilders.get(URL_MENU + "/1"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -42,13 +42,13 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByRestaurantWhereIdNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.get(URL_MENU + "/500/menu"))
+        perform(MockMvcRequestBuilders.get(URL_MENU + "/500"))
                 .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
     void getAllMenuToday() throws Exception {
-        perform(MockMvcRequestBuilders.get(URL_MENU + "/all-menu-today"))
+        perform(MockMvcRequestBuilders.get(URL_MENU))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -59,7 +59,7 @@ class MenuControllerTest extends AbstractControllerTest {
     void createMenuTodayOrNextDayIfVotingTimeIsEnd() throws Exception {
         int idRestaurant = 2;
         final ValidList<DishTo> newMenu = new ValidList<>(dishTo5, dishTo6);
-        List<Dish> newDishes = asDishes(perform(MockMvcRequestBuilders.post(URL_MENU + "/" + idRestaurant + "/menu")
+        List<Dish> newDishes = asDishes(perform(MockMvcRequestBuilders.post(URL_MENU + "/" + idRestaurant)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(newMenu)))
                 .andDo(print())
@@ -91,7 +91,8 @@ class MenuControllerTest extends AbstractControllerTest {
     void createMenuWithDate() throws Exception {
         int idRestaurant = 2;
         final ValidList<DishTo> newMenu = new ValidList<>(dishTo5WithDate, dishTo6WithDate);
-        List<Dish> newDishes = asDishes(perform(MockMvcRequestBuilders.post(URL_MENU + "/" + idRestaurant + "/menu-every-day")
+        List<Dish> newDishes = asDishes(perform(MockMvcRequestBuilders
+                .post(URL_MENU + "/" + idRestaurant + "/every-day")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(newMenu)))
                 .andDo(print())
@@ -119,7 +120,7 @@ class MenuControllerTest extends AbstractControllerTest {
     @Test
     void createMenuWithInvalidValue() throws Exception {
         final ValidList<DishTo> newMenu = new ValidList<>(dishToInvalid);
-        perform(MockMvcRequestBuilders.post(URL_MENU + "/2/menu")
+        perform(MockMvcRequestBuilders.post(URL_MENU + "/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(newMenu)))
                 .andDo(print())
