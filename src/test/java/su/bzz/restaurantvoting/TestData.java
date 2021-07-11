@@ -39,4 +39,7 @@ public class TestData {
 
     public static final List<Menu> menus = List.of(menu1, menu2);
     public static final List<Menu> menusRestaurant1 = List.of(menu1);
+
+    public static final String USER_MAIL = "user@gmail.com";
+    public static final String ADMIN_MAIL = "admin@bzz.su";
 }

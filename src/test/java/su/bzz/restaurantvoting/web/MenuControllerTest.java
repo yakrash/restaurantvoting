@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import su.bzz.restaurantvoting.MenuTestUtil;
 import su.bzz.restaurantvoting.model.Dish;
@@ -32,6 +33,7 @@ class MenuControllerTest extends AbstractControllerTest {
     DishRepository dishRepository;
 
     @Test
+    @WithUserDetails(value = USER_MAIL)
     void getAllByRestaurantIdByToday() throws Exception {
         perform(MockMvcRequestBuilders.get(URL_MENU + "/1"))
                 .andExpect(status().isOk())
@@ -41,12 +43,14 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = USER_MAIL)
     void getAllByRestaurantWhereIdNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(URL_MENU + "/500"))
                 .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
+    @WithUserDetails(value = USER_MAIL)
     void getAllMenuToday() throws Exception {
         perform(MockMvcRequestBuilders.get(URL_MENU))
                 .andExpect(status().isOk())
@@ -56,6 +60,7 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void createMenuTodayOrNextDayIfVotingTimeIsEnd() throws Exception {
         int idRestaurant = 2;
         final ValidList<DishTo> newMenu = new ValidList<>(dishTo5, dishTo6);
@@ -88,6 +93,7 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void createMenuWithDate() throws Exception {
         int idRestaurant = 2;
         final ValidList<DishTo> newMenu = new ValidList<>(dishTo5WithDate, dishTo6WithDate);
@@ -118,6 +124,7 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void createMenuWithInvalidValue() throws Exception {
         final ValidList<DishTo> newMenu = new ValidList<>(dishToInvalid);
         perform(MockMvcRequestBuilders.post(URL_MENU + "/2")
@@ -128,6 +135,7 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void deleteDish() throws Exception {
         int dishId = 2;
         perform(MockMvcRequestBuilders.delete(URL_MENU + "/dish/" + dishId))
@@ -138,6 +146,7 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void updateDish() throws Exception {
         int idDish = dish1.id();
         Dish newDish = asDish(perform(MockMvcRequestBuilders.put(URL_MENU + "/dish/" + idDish)
@@ -155,11 +164,38 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithUserDetails(value = ADMIN_MAIL)
     void updateDishWithInvalidValue() throws Exception {
         perform(MockMvcRequestBuilders.put(URL_MENU + "/dish/" + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(dishToInvalid)))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void getUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(URL_MENU))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @WithUserDetails(value = USER_MAIL)
+    @Test
+    void putUsersAuth() throws Exception {
+        perform(MockMvcRequestBuilders.put(URL_MENU))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deleteUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.delete(URL_MENU))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @WithUserDetails(value = USER_MAIL)
+    @Test
+    void postUserAuth() throws Exception {
+        perform(MockMvcRequestBuilders.put(URL_MENU))
+                .andExpect(status().isForbidden());
     }
 }
