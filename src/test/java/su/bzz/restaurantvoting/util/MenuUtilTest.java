@@ -5,6 +5,7 @@ import su.bzz.restaurantvoting.to.Menu;
 
 import java.util.List;
 
+import static su.bzz.restaurantvoting.MenuTestUtil.assertEquals;
 import static su.bzz.restaurantvoting.TestData.*;
 import static su.bzz.restaurantvoting.util.MenuUtil.getMenus;
 

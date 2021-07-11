@@ -23,17 +23,17 @@ import java.util.List;
 
 import static su.bzz.restaurantvoting.util.DishUtil.*;
 import static su.bzz.restaurantvoting.util.ValidationUtil.checkNotFound;
-import static su.bzz.restaurantvoting.web.MenuController.URLREST;
+import static su.bzz.restaurantvoting.web.MenuController.URL_MENU;
 
 @RestController
-@RequestMapping(value = URLREST, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = URL_MENU, produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 @Slf4j
 @Validated
 public class MenuController {
     private final DishRepository dishRepository;
     private final RestaurantRepository restaurantRepository;
-    public static final String URLREST = "/api/restaurant";
+    public static final String URL_MENU = "/api/restaurant";
 
     @GetMapping("/{restaurantId}/menu")
     public List<Menu> getAllByRestaurantIdByToday(@PathVariable Integer restaurantId) {
@@ -60,7 +60,7 @@ public class MenuController {
         List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToToday(dishesTo, restaurant));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/restaurant/{restaurantId}/menu")
+                .path(URL_MENU + "/{restaurantId}/menu")
                 .buildAndExpand(restaurant.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(dishes);
     }
@@ -76,7 +76,7 @@ public class MenuController {
         List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToWithDate(dishesTo, restaurant));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/restaurant/{restaurantId}/menu")
+                .path(URL_MENU + "/{restaurantId}/menu")
                 .buildAndExpand(restaurant.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(dishes);
     }

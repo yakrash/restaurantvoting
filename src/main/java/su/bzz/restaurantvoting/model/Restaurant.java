@@ -37,4 +37,8 @@ public class Restaurant extends BaseEntity {
         super(id);
         this.name = name;
     }
+
+    public Restaurant(String name) {
+        this.name = name;
+    }
 }

@@ -1,19 +1,13 @@
 package su.bzz.restaurantvoting;
 
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import su.bzz.restaurantvoting.model.Dish;
 import su.bzz.restaurantvoting.model.Restaurant;
 import su.bzz.restaurantvoting.to.DishTo;
 import su.bzz.restaurantvoting.to.Menu;
-import su.bzz.restaurantvoting.util.JsonUtil;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.BiConsumer;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static su.bzz.restaurantvoting.util.DishUtil.getDishesToFromListDish;
 
 public class TestData {
@@ -21,6 +15,8 @@ public class TestData {
 
     public static final Restaurant restaurant1 = new Restaurant(1, "Milk&Meat");
     public static final Restaurant restaurant2 = new Restaurant(2, "BBQ Ribs");
+
+    public static final List<Restaurant> restaurants = List.of(restaurant1, restaurant2);
 
     public static final Dish dish1 = new Dish(1, "Soup", 5L, dateForDish, restaurant1);
     public static final Dish dish2 = new Dish(2, "Steak", 10L, dateForDish, restaurant1);
@@ -43,27 +39,4 @@ public class TestData {
 
     public static final List<Menu> menus = List.of(menu1, menu2);
     public static final List<Menu> menusRestaurant1 = List.of(menu1);
-
-    public static void assertEquals(List<Menu> actual, List<Menu> expected) {
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
-    }
-
-    public static List<Menu> asMenus(MvcResult mvcResult) throws IOException {
-        String jsonActual = mvcResult.getResponse().getContentAsString();
-        return JsonUtil.readValues(jsonActual, Menu.class);
-    }
-
-    public static List<Dish> asDishes(MvcResult mvcResult) throws IOException {
-        String jsonActual = mvcResult.getResponse().getContentAsString();
-        return JsonUtil.readValues(jsonActual, Dish.class);
-    }
-
-    public static Dish asDish(MvcResult mvcResult) throws IOException {
-        String jsonActual = mvcResult.getResponse().getContentAsString();
-        return JsonUtil.readValue(jsonActual, Dish.class);
-    }
-
-    public static ResultMatcher jsonMatcher(List<Menu> expected, BiConsumer<List<Menu>, List<Menu>> equalsAssertion) {
-        return mvcResult -> equalsAssertion.accept(asMenus(mvcResult), expected);
-    }
 }
