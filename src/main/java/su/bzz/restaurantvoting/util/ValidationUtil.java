@@ -1,19 +1,17 @@
 package su.bzz.restaurantvoting.util;
 
-import javassist.NotFoundException;
+import lombok.experimental.UtilityClass;
 import su.bzz.restaurantvoting.to.Menu;
+import su.bzz.restaurantvoting.util.exception.IllegalRequestDataException;
 
 import java.util.List;
 
+@UtilityClass
 public class ValidationUtil {
 
     public static List<Menu> checkNotFound(List<Menu> menu, Integer id) {
         if (menu == null || menu.size() == 0) {
-            try {
-                throw new NotFoundException("Not found restaurant with id " + id);
-            } catch (NotFoundException e) {
-                e.printStackTrace();
-            }
+            throw new IllegalRequestDataException("Not found restaurant with id " + id);
         }
         return menu;
     }
