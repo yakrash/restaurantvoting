@@ -16,4 +16,7 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.date = CURRENT_DATE()")
     List<Dish> findAllByToday();
+
+    @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.id=:dishId")
+    Dish getDishById(@Param("dishId") Integer dishId);
 }

@@ -3,12 +3,15 @@ package su.bzz.restaurantvoting.util;
 import lombok.extern.slf4j.Slf4j;
 import su.bzz.restaurantvoting.model.Dish;
 import su.bzz.restaurantvoting.model.Restaurant;
+import su.bzz.restaurantvoting.to.DishTo;
 import su.bzz.restaurantvoting.to.Menu;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static su.bzz.restaurantvoting.util.DishUtil.getDishesToFromListDish;
 
 @Slf4j
 public class MenuUtil {
@@ -24,6 +27,7 @@ public class MenuUtil {
     }
 
     public static Menu getMenu(Restaurant restaurant, List<Dish> dishes) {
-        return new Menu(restaurant, dishes);
+        List<DishTo> dishTos = getDishesToFromListDish(dishes);
+        return new Menu(restaurant, dishTos);
     }
 }

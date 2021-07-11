@@ -1,5 +1,6 @@
 package su.bzz.restaurantvoting.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import su.bzz.restaurantvoting.AuthUser;
-import su.bzz.restaurantvoting.model.Role;
 import su.bzz.restaurantvoting.model.User;
 import su.bzz.restaurantvoting.repository.UserRepository;
+import su.bzz.restaurantvoting.util.JsonUtil;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Configuration
@@ -29,6 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
+
+    @PostConstruct
+    void setMapper() {
+        JsonUtil.setObjectMapper(objectMapper);
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {

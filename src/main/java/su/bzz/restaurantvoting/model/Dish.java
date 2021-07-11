@@ -1,7 +1,6 @@
 package su.bzz.restaurantvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.OnDelete;
@@ -23,6 +22,10 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 @Slf4j
 public class Dish extends BaseEntity {
+    public Dish(Integer id, String name, Long priceInDollars, LocalDate date, Restaurant restaurant) {
+        this(name, priceInDollars, date, restaurant);
+        this.id = id;
+    }
 
     @Column(name = "name", nullable = false)
     @NotBlank
@@ -36,7 +39,7 @@ public class Dish extends BaseEntity {
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)
