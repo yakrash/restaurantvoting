@@ -31,12 +31,22 @@ public class DishUtil {
     }
 
     public static List<Dish> getDishesFromListDishToToday(ValidList<DishTo> dishTos, Restaurant restaurant) {
-        log.info("getDishesFromListDishToToday");
+        log.info("get Dishes From ListDishTo Today");
         return dishTos.getValues().stream().map(d -> getDishFromDishToToday(d, restaurant)).collect(Collectors.toList());
     }
 
+    public static Dish getDishFromDishToWithDate(DishTo dishTo, Restaurant restaurant) {
+        log.info("get Dish From DishTo with date");
+        return new Dish(dishTo.getName(), dishTo.getPriceInDollars(), dishTo.getDate(), restaurant);
+    }
+
+    public static List<Dish> getDishesFromListDishToWithDate(ValidList<DishTo> dishTos, Restaurant restaurant) {
+        log.info("get Dishes From ListDishTo With Date");
+        return dishTos.getValues().stream().map(d -> getDishFromDishToWithDate(d, restaurant)).collect(Collectors.toList());
+    }
+
     public static List<DishTo> getDishesToFromListDish(List<Dish> dishes) {
-        log.info("getDishesToFromListDish");
+        log.info("get DishesTo From ListDish");
         return dishes.stream().map(DishUtil::getDishToFromDish).collect(Collectors.toList());
     }
 

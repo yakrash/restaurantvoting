@@ -31,6 +31,8 @@ public class TestData {
     public static final DishTo dishTo6 = new DishTo("Soup", 6L);
     public static final DishTo dishToInvalid = new DishTo("S", 6000L);
     public static final DishTo dishForUpdate = new DishTo("Steak", 10L);
+    public static final DishTo dishTo5WithDate = new DishTo("Tea", 1L, dateForDish);
+    public static final DishTo dishTo6WithDate = new DishTo("Soup", 6L, dateForDish);
 
     public static final List<Dish> dishesRestaurant1Today = List.of(dish1, dish2, dish3);
     public static final List<Dish> dishesRestaurant2Today = List.of(dish4);

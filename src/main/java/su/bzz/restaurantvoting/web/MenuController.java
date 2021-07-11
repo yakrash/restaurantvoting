@@ -21,8 +21,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static su.bzz.restaurantvoting.util.DishUtil.getDishesFromListDishToToday;
-import static su.bzz.restaurantvoting.util.DishUtil.setDishFromDishTo;
+import static su.bzz.restaurantvoting.util.DishUtil.*;
 import static su.bzz.restaurantvoting.util.ValidationUtil.checkNotFound;
 import static su.bzz.restaurantvoting.web.MenuController.URLREST;
 
@@ -59,6 +58,22 @@ public class MenuController {
 
         Restaurant restaurant = restaurantRepository.getById(restaurantId);
         List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToToday(dishesTo, restaurant));
+
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/restaurant/{restaurantId}/menu")
+                .buildAndExpand(restaurant.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(dishes);
+    }
+
+    @PostMapping("/{restaurantId}/menu-every-day")
+    public ResponseEntity<List<Dish>> createMenuWithDate(
+            @Valid @RequestBody ValidList<DishTo> dishesTo,
+            @PathVariable Integer restaurantId) {
+
+        log.info("create dish(es) {} for restaurantId: {}", dishesTo, restaurantId);
+
+        Restaurant restaurant = restaurantRepository.getById(restaurantId);
+        List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToWithDate(dishesTo, restaurant));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/restaurant/{restaurantId}/menu")

@@ -87,6 +87,35 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createMenuWithDate() throws Exception {
+        int idRestaurant = 2;
+        final ValidList<DishTo> newMenu = new ValidList<>(dishTo5WithDate, dishTo6WithDate);
+        List<Dish> newDishes = asDishes(perform(MockMvcRequestBuilders.post(URLREST + "/" + idRestaurant + "/menu-every-day")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValue(newMenu)))
+                .andDo(print())
+                .andExpect(status().isCreated()).andReturn());
+
+        Integer newIdDish1 = newDishes.get(0).getId();
+        Integer newIdDish2 = newDishes.get(1).getId();
+
+        Dish dish1InDB = dishRepository.getDishById(newIdDish1);
+        Dish dish2InDB = dishRepository.getDishById(newIdDish2);
+
+        assertThat(dish1InDB.getRestaurant().getId()).isEqualTo(idRestaurant);
+        assertThat(dish2InDB.getRestaurant().getId()).isEqualTo(idRestaurant);
+
+        assertThat(dish1InDB.getName()).isEqualTo(dishTo5.getName());
+        assertThat(dish2InDB.getName()).isEqualTo(dishTo6.getName());
+
+        assertThat(dish1InDB.getPriceInDollars()).isEqualTo(dishTo5.getPriceInDollars());
+        assertThat(dish2InDB.getPriceInDollars()).isEqualTo(dishTo6.getPriceInDollars());
+
+        assertThat(dish1InDB.getDate()).isEqualTo(dishTo5WithDate.getDate());
+        assertThat(dish2InDB.getDate()).isEqualTo(dishTo6WithDate.getDate());
+    }
+
+    @Test
     void createMenuWithInvalidValue() throws Exception {
         final ValidList<DishTo> newMenu = new ValidList<>(dishToInvalid);
         perform(MockMvcRequestBuilders.post(URLREST + "/2/menu")

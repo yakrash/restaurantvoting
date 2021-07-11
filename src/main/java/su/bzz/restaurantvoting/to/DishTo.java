@@ -32,4 +32,10 @@ public class DishTo implements Serializable {
         this.name = name;
         this.priceInDollars = priceInDollars;
     }
+
+    public DishTo(String name, Long priceInDollars, LocalDate date) {
+        this.name = name;
+        this.priceInDollars = priceInDollars;
+        this.date = date;
+    }
 }
