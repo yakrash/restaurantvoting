@@ -1,6 +1,6 @@
 INSERT INTO USERS (EMAIL, FIRST_NAME, LAST_NAME, PASSWORD)
 VALUES ('user@gmail.com', 'User_First', 'User_Last', '{noop}password'),
-       ('user2222@gmail.com', '2User_First2', '2User_Last2', '{noop}password'),
+       ('user2@gmail.com', '2User_First2', '2User_Last2', '{noop}password'),
        ('admin@bzz.su', 'Admin_First', 'Admin_Last', '{noop}admin');
 
 INSERT INTO USER_ROLE (ROLE, USER_ID)
@@ -20,6 +20,8 @@ VALUES ('2021-07-11', 'Soup', 5, 1),
        ('2021-07-10', 'Dessert', 12, 1),
        ('2021-07-11', 'Pizza', 15, 2);
 
-INSERT INTO VOTES (RESTAURANT_ID, USER_ID)
-VALUES (1, 1),
-       (2, 2);
+INSERT INTO VOTES (RESTAURANT_ID, USER_ID, DATE)
+VALUES (1, 1, '2021-07-15'),
+       (1, 2, '2021-07-15'),
+       (2, 3, '2021-07-15'),
+       (2, 2, '2021-07-10');

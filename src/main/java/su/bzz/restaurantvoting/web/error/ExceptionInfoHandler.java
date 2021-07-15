@@ -1,5 +1,6 @@
 package su.bzz.restaurantvoting.web.error;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +39,22 @@ public class ExceptionInfoHandler {
         final List<Violation> violations = e.getBindingResult().getFieldErrors().stream()
                 .map(error -> new Violation(error.getField(), error.getDefaultMessage()))
                 .collect(Collectors.toList());
+        return new ValidationErrorResponse(violations);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ValidationErrorResponse onDataIntegrityViolationException(
+            DataIntegrityViolationException e
+    ) {
+        Violation violation;
+        if (e.getMessage().contains("VOTE_UNIQUE_IDX")) {
+            violation = new Violation("RESTAURANT_ID", "You can vote only once a day, " +
+                    "but you can update your decision before 11:00 ");
+        } else {
+            violation = new Violation(e.getLocalizedMessage(), e.getMessage());
+        }
+        final List<Violation> violations = List.of(violation);
         return new ValidationErrorResponse(violations);
     }
 }
