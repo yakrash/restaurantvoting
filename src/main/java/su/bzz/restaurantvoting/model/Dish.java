@@ -14,7 +14,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "dishes")
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "date"},
+                name = "dish_unique_idx")})
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter

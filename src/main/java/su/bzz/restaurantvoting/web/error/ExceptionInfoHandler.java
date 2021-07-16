@@ -51,6 +51,8 @@ public class ExceptionInfoHandler {
         if (e.getMessage().contains("VOTE_UNIQUE_IDX")) {
             violation = new Violation("RESTAURANT_ID", "You can vote only once a day, " +
                     "but you can update your decision before 11:00 ");
+        } else if (e.getMessage().contains("DISH_UNIQUE_IDX")) {
+            violation = new Violation("Name", "The names of the dishes must be different on the same day ");
         } else {
             violation = new Violation(e.getLocalizedMessage(), e.getMessage());
         }
