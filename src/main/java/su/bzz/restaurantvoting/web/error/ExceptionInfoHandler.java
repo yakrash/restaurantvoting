@@ -1,5 +1,6 @@
 package su.bzz.restaurantvoting.web.error;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class ExceptionInfoHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,9 +51,11 @@ public class ExceptionInfoHandler {
     ) {
         Violation violation;
         if (e.getMessage().contains("VOTE_UNIQUE_IDX")) {
+            log.error("VOTE_UNIQUE_IDX");
             violation = new Violation("RESTAURANT_ID", "You can vote only once a day, " +
                     "but you can update your decision before 11:00 ");
         } else if (e.getMessage().contains("DISH_UNIQUE_IDX")) {
+            log.error("DISH_UNIQUE_IDX");
             violation = new Violation("Name", "The names of the dishes must be different on the same day ");
         } else {
             violation = new Violation(e.getLocalizedMessage(), e.getMessage());

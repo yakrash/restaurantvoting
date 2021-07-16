@@ -76,6 +76,7 @@ public class VoteController {
 
     @GetMapping("/all")
     public List<ResultVotingInt> getRestaurantsWithVoteTodaySortVote() {
+        log.info("Get rating today");
         return voteRepository.getRestaurantsWithVoteTodaySortVote();
     }
 }

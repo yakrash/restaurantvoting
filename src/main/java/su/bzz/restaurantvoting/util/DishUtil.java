@@ -51,6 +51,7 @@ public class DishUtil {
     }
 
     public static DishTo getDishToFromDish(Dish dish) {
+        log.info("get DishTo From Dish {}" + dish.toString());
         return new DishTo(dish.getName(), dish.getPriceInDollars(), dish.getDate(), dish.id());
     }
 }
