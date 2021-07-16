@@ -11,7 +11,7 @@ public class ValidationUtil {
 
     public static List<Menu> checkNotFound(List<Menu> menu, Integer id) {
         if (menu == null || menu.size() == 0) {
-            throw new IllegalRequestDataException("Not found restaurant with id " + id);
+            throw new IllegalRequestDataException("Not found menu of restaurant with id " + id);
         }
         return menu;
     }

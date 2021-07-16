@@ -2,6 +2,7 @@ package su.bzz.restaurantvoting.to;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.ToString;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -9,11 +10,12 @@ import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
 
+@ToString
 public class ValidList<E> {
     @JsonValue
     @Valid
     @NotNull
-    @Size(min = 1, message = "array body must contain at least one item.")
+    @Size(min = 1, message = "There must be at least one dish")
     private List<E> values;
 
     @JsonCreator

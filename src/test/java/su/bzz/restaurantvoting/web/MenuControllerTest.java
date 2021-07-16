@@ -11,6 +11,7 @@ import su.bzz.restaurantvoting.model.Dish;
 import su.bzz.restaurantvoting.repository.DishRepository;
 import su.bzz.restaurantvoting.to.DishTo;
 import su.bzz.restaurantvoting.to.ValidList;
+import su.bzz.restaurantvoting.util.exception.IllegalRequestDataException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -73,8 +74,8 @@ class MenuControllerTest extends AbstractControllerTest {
         Integer newIdDish1 = newDishes.get(0).getId();
         Integer newIdDish2 = newDishes.get(1).getId();
 
-        Dish dish1InDB = dishRepository.getDishById(newIdDish1);
-        Dish dish2InDB = dishRepository.getDishById(newIdDish2);
+        Dish dish1InDB = getDish(newIdDish1);
+        Dish dish2InDB = getDish(newIdDish2);
 
         assertThat(dish1InDB.getRestaurant().getId()).isEqualTo(idRestaurant);
         assertThat(dish2InDB.getRestaurant().getId()).isEqualTo(idRestaurant);
@@ -107,8 +108,8 @@ class MenuControllerTest extends AbstractControllerTest {
         Integer newIdDish1 = newDishes.get(0).getId();
         Integer newIdDish2 = newDishes.get(1).getId();
 
-        Dish dish1InDB = dishRepository.getDishById(newIdDish1);
-        Dish dish2InDB = dishRepository.getDishById(newIdDish2);
+        Dish dish1InDB = getDish(newIdDish1);
+        Dish dish2InDB = getDish(newIdDish2);
 
         assertThat(dish1InDB.getRestaurant().getId()).isEqualTo(idRestaurant);
         assertThat(dish2InDB.getRestaurant().getId()).isEqualTo(idRestaurant);
@@ -158,7 +159,7 @@ class MenuControllerTest extends AbstractControllerTest {
         assertThat(newDish.getName()).isEqualTo(dishForUpdate.getName());
         assertThat(newDish.getPriceInDollars()).isEqualTo(dishForUpdate.getPriceInDollars());
 
-        Dish dishInDb = dishRepository.getDishById(idDish);
+        Dish dishInDb = getDish(idDish);
         assertThat(newDish.getName()).isEqualTo(dishInDb.getName());
         assertThat(newDish.getPriceInDollars()).isEqualTo(dishInDb.getPriceInDollars());
     }
@@ -197,5 +198,10 @@ class MenuControllerTest extends AbstractControllerTest {
     void postUserAuth() throws Exception {
         perform(MockMvcRequestBuilders.put(URL_MENU))
                 .andExpect(status().isForbidden());
+    }
+
+    private Dish getDish(Integer dishId) {
+        return dishRepository.getDishById(dishId)
+                .orElseThrow(() -> new IllegalRequestDataException("Not found dish with id " + dishId));
     }
 }

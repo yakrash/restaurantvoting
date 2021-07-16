@@ -11,11 +11,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import su.bzz.restaurantvoting.model.Dish;
 import su.bzz.restaurantvoting.model.Restaurant;
 import su.bzz.restaurantvoting.repository.DishRepository;
-import su.bzz.restaurantvoting.repository.RestaurantRepository;
+import su.bzz.restaurantvoting.service.RestaurantService;
 import su.bzz.restaurantvoting.to.DishTo;
 import su.bzz.restaurantvoting.to.Menu;
 import su.bzz.restaurantvoting.to.ValidList;
 import su.bzz.restaurantvoting.util.MenuUtil;
+import su.bzz.restaurantvoting.util.exception.IllegalRequestDataException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -32,7 +33,7 @@ import static su.bzz.restaurantvoting.web.MenuController.URL_MENU;
 @Validated
 public class MenuController {
     private final DishRepository dishRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
     public static final String URL_MENU = "/api/menu";
 
     @GetMapping("/{restaurantId}")
@@ -54,9 +55,9 @@ public class MenuController {
             @Valid @RequestBody ValidList<DishTo> dishesTo,
             @PathVariable Integer restaurantId) {
 
-        log.info("create dish(es) {} for restaurantId: {}", dishesTo, restaurantId);
+        log.info("create dish(es) {} for restaurantId: {}", dishesTo.toString(), restaurantId);
 
-        Restaurant restaurant = restaurantRepository.getById(restaurantId);
+        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
         List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToToday(dishesTo, restaurant));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -72,7 +73,7 @@ public class MenuController {
 
         log.info("create dish(es) {} for restaurantId: {}", dishesTo, restaurantId);
 
-        Restaurant restaurant = restaurantRepository.getById(restaurantId);
+        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
         List<Dish> dishes = dishRepository.saveAll(getDishesFromListDishToWithDate(dishesTo, restaurant));
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -85,14 +86,17 @@ public class MenuController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDish(@PathVariable Integer dishId) {
         log.info("Delete dish with id {}", dishId);
-        dishRepository.deleteById(dishId);
+        if (dishRepository.deleteByIdDish(dishId) == 0) {
+            throw new IllegalRequestDataException("Not found dish with id " + dishId);
+        }
     }
 
     @PutMapping("/dish/{dishId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Dish updateDish(@PathVariable Integer dishId, @Valid @RequestBody DishTo dishTo) {
         log.info("Update dish with id {}", dishId);
-        Dish dish = dishRepository.getDishById(dishId);
+        Dish dish = dishRepository.getDishById(dishId)
+                .orElseThrow(() -> new IllegalRequestDataException("Not found dish with id " + dishId));
         setDishFromDishTo(dishTo, dish);
         return dishRepository.save(dish);
     }

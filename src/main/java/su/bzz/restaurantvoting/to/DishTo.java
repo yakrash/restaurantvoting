@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class DishTo implements Serializable {
     @NotBlank
     @Size(min = 3, max = 128)

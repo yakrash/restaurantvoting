@@ -1,12 +1,15 @@
 package su.bzz.restaurantvoting.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import su.bzz.restaurantvoting.model.Dish;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DishRepository extends JpaRepository<Dish, Integer> {
@@ -18,5 +21,10 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
     List<Dish> findAllByToday();
 
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.id=:dishId")
-    Dish getDishById(@Param("dishId") Integer dishId);
+    Optional<Dish> getDishById(@Param("dishId") Integer dishId);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Dish d WHERE d.id=:dishId")
+    int deleteByIdDish(@Param("dishId") Integer dishId);
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import su.bzz.restaurantvoting.model.Restaurant;
 import su.bzz.restaurantvoting.repository.RestaurantRepository;
-import su.bzz.restaurantvoting.util.exception.IllegalRequestDataException;
+import su.bzz.restaurantvoting.service.RestaurantService;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -27,6 +27,7 @@ public class RestaurantController {
 
     public static final String URL_RESTAURANT = "/api/restaurant";
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
 
     @GetMapping
     public List<Restaurant> getAll() {
@@ -37,8 +38,7 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public Restaurant getById(@PathVariable Integer id) {
         log.info("get restaurant by id: " + id);
-        return restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalRequestDataException("Not found restaurant with id " + id));
+        return restaurantService.getRestaurant(id);
     }
 
     @PostMapping
@@ -58,6 +58,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant by id: " + id);
+        restaurantService.getRestaurant(id);
         restaurantRepository.deleteById(id);
     }
 
@@ -65,8 +66,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Restaurant update(@PathVariable int id, @Valid @RequestBody Restaurant restaurant) {
         log.info("update restaurant by id: " + id);
-        Restaurant restaurantUpdate = restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalRequestDataException("Not found restaurant with id " + id));
+        Restaurant restaurantUpdate = restaurantService.getRestaurant(id);
         restaurantUpdate.setName(restaurant.getName());
         return restaurantRepository.save(restaurantUpdate);
     }

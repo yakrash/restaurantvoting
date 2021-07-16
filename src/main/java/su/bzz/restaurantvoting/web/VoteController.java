@@ -12,8 +12,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import su.bzz.restaurantvoting.AuthUser;
 import su.bzz.restaurantvoting.model.Restaurant;
 import su.bzz.restaurantvoting.model.Vote;
-import su.bzz.restaurantvoting.repository.RestaurantRepository;
 import su.bzz.restaurantvoting.repository.VoteRepository;
+import su.bzz.restaurantvoting.service.RestaurantService;
 import su.bzz.restaurantvoting.to.ResultVotingInt;
 import su.bzz.restaurantvoting.to.VoteTo;
 import su.bzz.restaurantvoting.util.exception.IllegalRequestDataException;
@@ -34,15 +34,14 @@ public class VoteController {
     public static final String URL_VOTE = "/api/vote";
 
     private final VoteRepository voteRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
 
     @PostMapping("/{restaurantId}")
     public ResponseEntity<VoteTo> voting(@PathVariable Integer restaurantId,
                                          @AuthenticationPrincipal AuthUser authUser) {
         log.info("Voting for restaurantId: {}", restaurantId);
 
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new IllegalRequestDataException("Not found restaurant with id " + restaurantId));
+        Restaurant restaurant = restaurantService.getRestaurant(restaurantId);
 
         if (!isTimeVoting()) {
             throw new IllegalRequestDataException("Vote closed, we are waiting for you tomorrow until 11 o'clock.");
@@ -62,8 +61,7 @@ public class VoteController {
     public void updateVote(@PathVariable Integer restaurantId,
                            @AuthenticationPrincipal AuthUser authUser) {
         log.info("Update vote for restaurantId: {}", restaurantId);
-        restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new IllegalRequestDataException("Not found restaurant with id " + restaurantId));
+        restaurantService.getRestaurant(restaurantId);
 
         if (!isTimeVoting()) {
             throw new IllegalRequestDataException("Vote closed, we are waiting for you tomorrow until 11 o'clock.");
