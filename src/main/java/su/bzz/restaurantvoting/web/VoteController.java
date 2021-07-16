@@ -14,7 +14,7 @@ import su.bzz.restaurantvoting.model.Restaurant;
 import su.bzz.restaurantvoting.model.Vote;
 import su.bzz.restaurantvoting.repository.RestaurantRepository;
 import su.bzz.restaurantvoting.repository.VoteRepository;
-import su.bzz.restaurantvoting.to.ResultVoting;
+import su.bzz.restaurantvoting.to.ResultVotingInt;
 import su.bzz.restaurantvoting.to.VoteTo;
 import su.bzz.restaurantvoting.util.exception.IllegalRequestDataException;
 
@@ -77,7 +77,7 @@ public class VoteController {
     }
 
     @GetMapping("/all")
-    public List<ResultVoting> getRestaurantsWithVoteTodaySortVote() {
+    public List<ResultVotingInt> getRestaurantsWithVoteTodaySortVote() {
         return voteRepository.getRestaurantsWithVoteTodaySortVote();
     }
 }

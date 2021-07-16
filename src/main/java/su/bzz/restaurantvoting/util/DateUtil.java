@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class DateUtil {
-    private static LocalTime start = LocalTime.of(11, 00);
+    private static final LocalTime start = LocalTime.of(11, 0);
 
     public static LocalDate atStartOfNextDay() {
         LocalDate localDate = LocalDate.now();

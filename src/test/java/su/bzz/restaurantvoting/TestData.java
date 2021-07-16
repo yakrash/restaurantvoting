@@ -52,4 +52,7 @@ public class TestData {
     public static final Vote vote1 = new Vote(5, restaurant1, user, dateToday);
     public static final Vote voteUpdate = new Vote(2, restaurant2, user2, dateToday);
 //    public static final Vote vote3 = new Vote(restaurant2, admin, dateToday);
+
+    public static final ResultVoting resultVoting = new ResultVoting(restaurant1, 1);
+    public static final ResultVoting resultVoting2 = new ResultVoting(restaurant2, 1);
 }

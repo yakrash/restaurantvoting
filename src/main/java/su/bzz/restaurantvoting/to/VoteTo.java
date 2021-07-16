@@ -5,15 +5,10 @@ import lombok.*;
 import java.time.LocalDate;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Setter
-@ToString
 public class VoteTo {
-    private int id;
-    private String restaurantName;
-    private int userId;
-    private LocalDate registeredDate;
-
-
+    private final int id;
+    private final String restaurantName;
+    private final int userId;
+    private final LocalDate registeredDate;
 }
