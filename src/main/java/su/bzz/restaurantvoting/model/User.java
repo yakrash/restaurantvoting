@@ -11,9 +11,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -23,6 +22,16 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString(callSuper = true, exclude = {"password", "votes"})
 public class User extends BaseEntity implements Serializable {
+
+    public User(int id, String email, String firstName, String lastName, String password, LocalDate registered, Set<Role> roles) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.registered = registered;
+        this.roles = roles;
+        this.id = id;
+    }
 
     @Column(name = "email", nullable = false, unique = true)
     @Email
@@ -46,7 +55,7 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date registered = new Date();
+    private LocalDate registered = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique")})

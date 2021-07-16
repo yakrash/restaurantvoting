@@ -14,14 +14,14 @@ VALUES ('Milk&Meat'),
        ('BBQ Ribs');
 
 INSERT INTO DISHES (DATE, NAME, PRICE_IN_DOLLARS, RESTAURANT_ID)
-VALUES ('2021-07-11', 'Soup', 5, 1),
-       ('2021-07-11', 'Steak', 10, 1),
-       ('2021-07-11', 'Dessert', 12, 1),
+VALUES ('2021-07-16', 'Soup', 5, 1),
+       ('2021-07-16', 'Steak', 10, 1),
+       ('2021-07-16', 'Dessert', 12, 1),
        ('2021-07-10', 'Dessert', 12, 1),
-       ('2021-07-11', 'Pizza', 15, 2);
+       ('2021-07-16', 'Pizza', 15, 2);
 
 INSERT INTO VOTES (RESTAURANT_ID, USER_ID, DATE)
 VALUES (1, 1, '2021-07-15'),
-       (1, 2, '2021-07-15'),
-       (2, 3, '2021-07-15'),
+       (1, 2, '2021-07-16'),
+       (2, 3, '2021-07-16'),
        (2, 2, '2021-07-10');

@@ -20,6 +20,10 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 @Slf4j
 public class Vote extends BaseEntity {
+    public Vote(int id, Restaurant restaurant, User user, LocalDate now) {
+        this(restaurant, user, now);
+        this.id = id;
+    }
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,9 +41,4 @@ public class Vote extends BaseEntity {
     @NotNull
 //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
-
-    public Vote(int id, Restaurant restaurant, User user, LocalDate now) {
-        this(restaurant, user, now);
-        super.id = id;
-    }
 }

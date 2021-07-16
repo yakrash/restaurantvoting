@@ -71,7 +71,7 @@ public class VoteController {
 
         Vote voteOld = voteRepository.findByUserIdAndToday(authUser.getUser().getId());
         if (voteOld == null) {
-            throw new IllegalRequestDataException("You have not yet voted for the restaurant");
+            throw new IllegalRequestDataException("You haven't yet voted for the restaurant");
         }
         voteRepository.updateVote(restaurantId, voteOld.id());
     }

@@ -16,12 +16,14 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant WHERE v.user.id =:userId AND v.date = CURRENT_DATE()")
     Vote findByUserIdAndToday(@Param("userId") Integer userId);
 
-    @Modifying
+//    https://stackoverflow.com/a/20056058/15422633
+    @Transactional
+    @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE VOTES SET restaurant_id=?1 WHERE id=?2",
             nativeQuery = true)
     void updateVote(Integer restaurantId, Integer idVote);
 
     @Query("SELECT v.restaurant as restaurant, count (*) as votes FROM Vote v " +
-            "WHERE v.date = CURRENT_DATE() group by v.restaurant having COUNT(*) > 0")
+            "WHERE v.date = CURRENT_DATE() group by v.restaurant having COUNT(*) > 0 ORDER BY votes DESC")
     List<ResultVoting> getRestaurantsWithVoteTodaySortVote();
 }
