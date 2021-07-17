@@ -36,7 +36,7 @@ public class DishUtil {
     }
 
     public static Dish getDishFromDishToWithDate(DishTo dishTo, Restaurant restaurant) {
-        log.info("get Dish From DishTo with date");
+        log.info("get Dish From DishTo with date {}", dishTo.toString());
         return new Dish(dishTo.getName(), dishTo.getPriceInDollars(), dishTo.getDate(), restaurant);
     }
 

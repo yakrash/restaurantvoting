@@ -11,8 +11,7 @@ import su.bzz.restaurantvoting.model.Restaurant;
 import su.bzz.restaurantvoting.repository.RestaurantRepository;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static su.bzz.restaurantvoting.RestaurantTestUtil.*;
 import static su.bzz.restaurantvoting.TestData.*;
 import static su.bzz.restaurantvoting.util.JsonUtil.writeValue;
@@ -113,5 +112,16 @@ class RestaurantControllerTest extends AbstractControllerTest {
     void postUserAuth() throws Exception {
         perform(MockMvcRequestBuilders.put(URL_RESTAURANT))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getRestaurantWithInvalidValue() throws Exception {
+        perform(MockMvcRequestBuilders.get(URL_RESTAURANT + "/200"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.status").value(422))
+                .andExpect(jsonPath("$.message").value("422 UNPROCESSABLE_ENTITY " +
+                        "\"Not found restaurant with id 200\""));
     }
 }

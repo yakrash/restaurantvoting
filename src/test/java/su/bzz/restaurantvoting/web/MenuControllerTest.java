@@ -18,8 +18,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static su.bzz.restaurantvoting.MenuTestUtil.*;
 import static su.bzz.restaurantvoting.TestData.*;
 import static su.bzz.restaurantvoting.util.DateUtil.atStartOfNextDay;
@@ -132,7 +132,22 @@ class MenuControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValue(newMenu)))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.violations[0].message").value("size must be between 3 and 128"))
+                .andExpect(jsonPath("$.violations[1].message").value("must be between 1 and 500"));
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void createMenuWithEqualsNameOnSameDay() throws Exception {
+        final ValidList<DishTo> newMenu = new ValidList<>(dishTo5WithDate, dishTo5WithDateCopy);
+        perform(MockMvcRequestBuilders.post(URL_MENU + "/2/every-day")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValue(newMenu)))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("$.violations[0].message").value("The names of the dishes " +
+                        "must be different on the same day "));
     }
 
     @Test

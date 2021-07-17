@@ -14,8 +14,8 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "date"},
-                name = "dish_unique_idx")})
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "date", "restaurant_id"},
+        name = "dish_unique_idx")})
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -40,7 +40,6 @@ public class Dish extends BaseEntity {
 
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY)

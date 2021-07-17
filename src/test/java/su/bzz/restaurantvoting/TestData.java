@@ -27,8 +27,9 @@ public class TestData {
     public static final DishTo dishTo5 = new DishTo("Tea", 1L);
     public static final DishTo dishTo6 = new DishTo("Soup", 6L);
     public static final DishTo dishToInvalid = new DishTo("S", 6000L);
-    public static final DishTo dishForUpdate = new DishTo("Steak", 10L);
+    public static final DishTo dishForUpdate = new DishTo("Pizza", 10L);
     public static final DishTo dishTo5WithDate = new DishTo("Tea", 1L, dateToday);
+    public static final DishTo dishTo5WithDateCopy = new DishTo("Tea", 5L, dateToday);
     public static final DishTo dishTo6WithDate = new DishTo("Soup", 6L, dateToday);
 
     public static final List<Dish> dishesRestaurant1Today = List.of(dish1, dish2, dish3);
@@ -49,7 +50,7 @@ public class TestData {
 //    public static final User admin = new User(3, ADMIN_MAIL, "Admin_First", "Admin_Last", "admin", dateToday, Set.of(Role.ADMIN, Role.USER));
 
 
-    public static final Vote vote1 = new Vote(5, restaurant1, user, dateToday);
+    public static final Vote vote1 = new Vote(restaurant1, user, dateToday);
     public static final Vote voteUpdate = new Vote(2, restaurant2, user2, dateToday);
 //    public static final Vote vote3 = new Vote(restaurant2, admin, dateToday);
 

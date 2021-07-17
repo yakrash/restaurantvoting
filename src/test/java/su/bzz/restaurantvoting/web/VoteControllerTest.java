@@ -13,12 +13,12 @@ import su.bzz.restaurantvoting.repository.VoteRepository;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static su.bzz.restaurantvoting.TestData.*;
-import static su.bzz.restaurantvoting.VoteTestUtil.*;
-import static su.bzz.restaurantvoting.util.VoteUtil.getVoteTo;
+import static su.bzz.restaurantvoting.VoteTestUtil.asVote;
+import static su.bzz.restaurantvoting.VoteTestUtil.jsonMatcher;
 import static su.bzz.restaurantvoting.web.VoteController.URL_VOTE;
+
 
 class VoteControllerTest extends AbstractControllerTest {
 
@@ -27,14 +27,17 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @WithUserDetails(value = USER_MAIL)
     @Test
-    void voting() throws Exception {
+    void createVoting() throws Exception {
         int restaurantId = restaurant1.id();
         Vote voteCreated = asVote(perform(MockMvcRequestBuilders.post(URL_VOTE + "/" + restaurantId))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonMatcher(getVoteTo(vote1), VoteTestUtil::assertEquals)).andReturn());
-        Vote voteDB = voteRepository.findById(voteCreated.id()).orElseThrow();
+                .andReturn());
+
+        int id = voteCreated.id();
+        vote1.setId(id);
+        Vote voteDB = voteRepository.findById(id).orElseThrow();
         Assertions.assertEquals(vote1.getRestaurant(), voteDB.getRestaurant());
         Assertions.assertEquals(vote1.getUser().getId(), voteDB.getUser().getId());
     }
@@ -60,5 +63,33 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonMatcher(List.of(resultVoting, resultVoting2), VoteTestUtil::assertEquals));
+    }
+
+    @Test
+    void getUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(URL_VOTE))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void postVoteWithInvalidRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.post(URL_VOTE + "/200"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError())
+                .andDo(print())
+                .andExpect(jsonPath("$.status").value(422))
+                .andExpect(jsonPath("$.message").value("422 UNPROCESSABLE_ENTITY " +
+                        "\"Not found restaurant with id 200\""));
+    }
+
+    @WithUserDetails(value = USER2_MAIL)
+    @Test
+    void invalidVotingAgain() throws Exception {
+        perform(MockMvcRequestBuilders.post(URL_VOTE + "/1"))
+                .andExpect(status().is4xxClientError())
+                .andDo(print())
+                .andExpect(jsonPath("$.violations[0].message").value("You can vote only once " +
+                        "a day, but you can update your decision before 11:00 "));
     }
 }
