@@ -2,6 +2,9 @@ package su.bzz.restaurantvoting.web;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,7 @@ public class RestaurantController {
         return restaurantRepository.findAll();
     }
 
+    @Cacheable("restaurant")
     @GetMapping("/{id}")
     public Restaurant getById(@PathVariable Integer id) {
         log.info("get restaurant by id: " + id);
@@ -55,6 +59,7 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict("restaurant")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant by id: " + id);
@@ -63,6 +68,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
+    @CachePut("restaurant")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Restaurant update(@PathVariable int id, @Valid @RequestBody Restaurant restaurant) {
         log.info("update restaurant by id: " + id);

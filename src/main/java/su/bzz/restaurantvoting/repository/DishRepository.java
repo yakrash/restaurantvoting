@@ -1,5 +1,7 @@
 package su.bzz.restaurantvoting.repository;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +16,11 @@ import java.util.Optional;
 @Repository
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
+    @Cacheable("dish")
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.restaurant.id=:id AND d.date = CURRENT_DATE()")
     List<Dish> findAllByRestaurantIdByToday(@Param("id") Integer id);
 
+    @Cacheable("dish")
     @Query("SELECT d FROM Dish d JOIN FETCH d.restaurant WHERE d.date = CURRENT_DATE()")
     List<Dish> findAllByToday();
 
@@ -25,6 +29,7 @@ public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     @Transactional
     @Modifying
+    @CacheEvict("dish")
     @Query("DELETE FROM Dish d WHERE d.id=:dishId")
     int deleteByIdDish(@Param("dishId") Integer dishId);
 }
