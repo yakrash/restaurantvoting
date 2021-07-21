@@ -47,12 +47,10 @@ public class TestData {
     public static final String ADMIN_MAIL = "admin@bzz.su";
     public static final User user = new User(1, USER_MAIL, "User_First", "User_Last", "password", dateToday, Set.of(Role.USER));
     public static final User user2 = new User(2, USER2_MAIL, "2User_First2", "2User_Last2", "password", dateToday, Set.of(Role.USER));
-//    public static final User admin = new User(3, ADMIN_MAIL, "Admin_First", "Admin_Last", "admin", dateToday, Set.of(Role.ADMIN, Role.USER));
 
 
     public static final Vote vote1 = new Vote(restaurant1, user, dateToday);
     public static final Vote voteUpdate = new Vote(2, restaurant2, user2, dateToday);
-//    public static final Vote vote3 = new Vote(restaurant2, admin, dateToday);
 
     public static final ResultVoting resultVoting = new ResultVoting(restaurant1, 1);
     public static final ResultVoting resultVoting2 = new ResultVoting(restaurant2, 1);

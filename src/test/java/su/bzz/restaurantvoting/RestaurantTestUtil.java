@@ -38,5 +38,4 @@ public class RestaurantTestUtil {
     public static ResultMatcher jsonMatcher(Restaurant expected, BiConsumer<Restaurant, Restaurant> equalsAssertion) {
         return mvcResult -> equalsAssertion.accept(asRestaurant(mvcResult), expected);
     }
-
 }

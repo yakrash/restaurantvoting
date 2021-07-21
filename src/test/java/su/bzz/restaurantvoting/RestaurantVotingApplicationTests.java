@@ -9,5 +9,4 @@ class RestaurantVotingApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

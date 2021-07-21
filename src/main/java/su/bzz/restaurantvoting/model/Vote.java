@@ -39,6 +39,5 @@ public class Vote extends BaseEntity {
 
     @Column(name = "date", nullable = false)
     @NotNull
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate date;
 }
